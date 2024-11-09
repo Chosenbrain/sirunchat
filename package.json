@@ -1,0 +1,28 @@
+{
+  "name": "sirunchat",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm start\" \"cd client && npm start\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^6.1.6",
+    "dotenv": "^16.4.5",
+    "emoji-mart": "^3.0.1",
+    "emoji-picker-react": "^4.12.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

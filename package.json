@@ -12,9 +12,7 @@
     "npm": "9.x"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
+    "concurrently": "^7.0.0"
   },
   "dependencies": {
     "@mui/icons-material": "^6.1.6",

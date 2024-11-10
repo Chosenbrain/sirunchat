@@ -1,5 +1,5 @@
 import {
-  saveuserSubscription,
+  saveUserSubscription,
   removeUserSubscription,
 } from './api/api';
 
@@ -51,7 +51,7 @@ export function subscribeUserToPush(callback: () => void) {
               .subscribe(subscribeOptions)
               .then(function (newSubscription) {
                 console.log('New push subscription added.');
-                return saveuserSubscription(newSubscription).then(
+                return saveUserSubscription(newSubscription).then(
                   () => {
                     callback();
                   }
@@ -69,7 +69,7 @@ export function subscribeUserToPush(callback: () => void) {
               });
           } else {
             console.info('Existing subscription detected.');
-            return saveuserSubscription(existingSubscription).then(
+            return saveUserSubscription(existingSubscription).then(
               () => {
                 callback();
               }

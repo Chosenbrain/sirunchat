@@ -47,6 +47,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Serve static files from the React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  // Catch-all route to serve index.html for any other request
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
+
 // Middleware to verify JWT
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];

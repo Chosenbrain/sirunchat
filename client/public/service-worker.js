@@ -35,12 +35,20 @@ async function cacheAppShell() {
 }
 
 self.addEventListener('fetch', (event) => {
+  // Ignore requests to chrome-extension or unsupported schemes
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       return cachedResponse || fetch(event.request).then((response) => {
         const responseClone = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         return response;
+      }).catch((error) => {
+        console.error('Fetch failed; returning offline page instead.', error);
+        return caches.match('/index.html');
       });
     })
   );

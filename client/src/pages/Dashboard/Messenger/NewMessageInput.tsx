@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { styled } from "@mui/system";
 import { useAppSelector } from "../../../store";
 import { notifyTyping, sendDirectMessage, sendGroupMessage } from "../../../socket/socketConnection";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
-import { Picker } from "emoji-mart";
-import "emoji-mart/css/emoji-mart.css";
+// Use dynamic import with Suspense for emoji picker
+const Picker = React.lazy(() => import("emoji-mart").then(module => ({ default: module.Picker })));
 
 const MainContainer = styled("div")({
     height: "60px",
@@ -15,10 +15,6 @@ const MainContainer = styled("div")({
     alignItems: "center",
     padding: "0 10px",
     position: "relative",
-    "@media (max-width: 600px)": {
-        height: "50px",
-        padding: "0 5px",
-    },
 });
 
 const Input = styled("input")({
@@ -31,18 +27,11 @@ const Input = styled("input")({
     fontSize: "14px",
     padding: "0 10px",
     outline: "none",
-    "@media (max-width: 600px)": {
-        height: "36px",
-        fontSize: "12px",
-    },
 });
 
 const SendButton = styled(IconButton)({
     color: "white",
     padding: "8px",
-    "@media (max-width: 600px)": {
-        padding: "4px",
-    },
 });
 
 const EmojiPickerContainer = styled("div")({
@@ -133,7 +122,9 @@ const NewMessageInput: React.FC = () => {
 
             {showEmojiPicker && (
                 <EmojiPickerContainer>
-                    <Picker onSelect={handleEmojiSelect} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Picker set="apple" onSelect={handleEmojiSelect} />
+                    </Suspense>
                 </EmojiPickerContainer>
             )}
         </MainContainer>

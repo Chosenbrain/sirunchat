@@ -13,8 +13,8 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.20.47",
-    "@types/react": "^16.14.24",
-    "@types/react-dom": "^16.9.14",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.2",
     "@types/react-redux": "^7.1.23",
     "axios": "^1.7.7",
     "css-select": "^5.1.0",
@@ -24,7 +24,7 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^3.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
     "simple-peer": "^9.11.1",
@@ -34,10 +34,10 @@
     "workbox-webpack-plugin": "^7.3.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,7 +55,6 @@
     ]
   },
   "devDependencies": {
-    "@types/simple-peer": "^9.11.4",
-    "react-app-rewired": "^2.2.1"
+    "@types/simple-peer": "^9.11.4"
   }
 }

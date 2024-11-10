@@ -18,6 +18,7 @@
     "@types/react-redux": "^7.1.23",
     "axios": "^1.7.7",
     "css-select": "^5.1.0",
+    "emoji-mart": "^5.6.0",
     "engine.io-client": "^6.6.2",
     "postcss": "^8.4.47",
     "react": "^17.0.2",

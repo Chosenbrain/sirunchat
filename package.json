@@ -1,9 +1,15 @@
 {
   "name": "sirunchat",
   "version": "1.0.0",
+  "main": "server/server.js",
   "scripts": {
-    "start": "cd server && npm install && npm start",
+    "start": "node server/server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "dev": "concurrently \"cd server && npm start\" \"cd client && npm start\""
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
@@ -21,7 +27,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
-  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",

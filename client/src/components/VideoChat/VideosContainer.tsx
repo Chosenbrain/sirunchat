@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/system";
 import Video from "./Video";
-import { useAppSelector } from "../../store" 
+import { useAppSelector } from "../../store";
 import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import useVideoSize from "../../utils/hooks/useVideoSize";
@@ -24,9 +24,7 @@ const MainContainer = styled("div")({
 
 const VideosContainer: React.FC<{
     isRoomMinimized: boolean;
-}> = ({
-    isRoomMinimized
-}) => {
+}> = ({ isRoomMinimized }) => {
     const {
         videoChat: {
             localStream,
@@ -42,11 +40,8 @@ const VideosContainer: React.FC<{
     } = useAppSelector((state) => state);
 
     const matches = useMediaQuery("(max-width:800px)");
-
-    
     const { x, y, X } = useVideoSize(remoteStreams.length + 1, AR);
     const { x: xDirectCall, y: yDirectCall } = useVideoSize(2, AR);
-
 
     return (
         <MainContainer
@@ -60,9 +55,7 @@ const VideosContainer: React.FC<{
         >
             {localStream && (
                 <Video
-                    stream={
-                        screenSharingStream ? screenSharingStream : localStream
-                    }
+                    stream={screenSharingStream ? screenSharingStream : localStream}
                     isLocalStream={true}
                     dimensions={{ x: xDirectCall, y: yDirectCall }}
                 />
@@ -70,11 +63,7 @@ const VideosContainer: React.FC<{
 
             {localStreamRoom && (
                 <Video
-                    stream={
-                        screenSharingStreamRoom
-                            ? screenSharingStreamRoom
-                            : localStreamRoom
-                    }
+                    stream={screenSharingStreamRoom ? screenSharingStreamRoom : localStreamRoom}
                     isLocalStream={true}
                     dimensions={{ x, y }}
                 />
@@ -92,9 +81,7 @@ const VideosContainer: React.FC<{
                         justifyContent: "center",
                     }}
                 >
-                    {callStatus === "ringing"
-                        ? "Ringing...."
-                        : callStatus === "rejected" && "Call Rejected"}
+                    {callStatus === "ringing" ? "Ringing...." : callStatus === "rejected" && "Call Rejected"}
                 </Typography>
             )}
 
@@ -114,9 +101,21 @@ const VideosContainer: React.FC<{
                     dimensions={{ x, y }}
                 />
             ))}
+
+            {/* Optional Usage of X */}
+            <Typography
+                sx={{
+                    fontSize: "12px",
+                    color: "#b9bbbe",
+                    position: "absolute",
+                    bottom: "10px",
+                    right: "10px",
+                }}
+            >
+                Total Width: {X}px
+            </Typography>
         </MainContainer>
     );
 };
-
 
 export default VideosContainer;

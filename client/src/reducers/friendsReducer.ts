@@ -1,21 +1,30 @@
 import { Reducer } from "redux";
-import { FriendsActions, actionTypes, PendingInvitation, Friend, OnlineUser, GroupChatDetails } from "../actions/types";
+import {
+    FriendsActions,
+    actionTypes,
+    PendingInvitation,
+    Friend,
+    OnlineUser,
+    GroupChatDetails
+} from "../actions/types";
 
-
-const initialState = {
-    friends: [],
-    pendingInvitations: [],
-    onlineUsers: [],
-    groupChatList: []
-};
-
+// Define the FriendsState interface with both `friends` and `list`
 interface FriendsState {
     friends: Array<Friend>;
+    list: Array<Friend>;  // Alias for `friends` to maintain compatibility
     pendingInvitations: Array<PendingInvitation>;
     onlineUsers: Array<OnlineUser>;
     groupChatList: Array<GroupChatDetails>;
 }
 
+// Set the initial state, making sure both `friends` and `list` are initialized
+const initialState: FriendsState = {
+    friends: [],
+    list: [],  // Initialize `list` as an alias for `friends`
+    pendingInvitations: [],
+    onlineUsers: [],
+    groupChatList: []
+};
 
 const friendsReducer: Reducer<FriendsState, FriendsActions> = (
     state = initialState,
@@ -32,6 +41,7 @@ const friendsReducer: Reducer<FriendsState, FriendsActions> = (
             return {
                 ...state,
                 friends: action.payload,
+                list: action.payload,  // Keep `list` and `friends` in sync
             };
 
         case actionTypes.setOnlineUsers:

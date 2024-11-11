@@ -14,8 +14,8 @@ interface FriendsListItemProps {
     id: string;
     username: string;
     email: string;
-    isOnline: boolean; 
-    onSelectFriend: () => void; 
+    isOnline: boolean;
+    onSelectFriend: () => void;
 }
 
 const FriendsListItem: React.FC<FriendsListItemProps> = ({
@@ -34,10 +34,16 @@ const FriendsListItem: React.FC<FriendsListItemProps> = ({
     const isFriendTyping = isTyping && isTyping.typing && id !== chosenChatDetails?.userId;
     const isChatActive = chosenChatDetails?.userId === id;
 
+    const handleSelectFriend = () => {
+        // Update chosen chat details with selected friend's information
+        dispatch(setChosenChatDetails({ userId: id, username, isOnline }));
+        onSelectFriend();
+    };
+
     return (
         <Tooltip title={email}>
             <Button
-                onClick={onSelectFriend} 
+                onClick={handleSelectFriend}
                 style={{
                     width: "100%",
                     height: "42px",

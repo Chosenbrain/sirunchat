@@ -11,8 +11,8 @@ import {
   DeleteGroupArgs,
 } from './types';
 
-// Set base URL from environment variable with a fallback to localhost
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+// Set base URL from environment variable with a fallback to localhost for development
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Create an Axios instance with the base URL
 const api = axios.create({
@@ -104,8 +104,7 @@ export const getMe = async () => {
   }
 };
 
-// Other functions with improved error handling
-
+// Invite friend request function
 export const inviteFriendRequest = async ({ email }: InviteFriendArgs) => {
   try {
     const res = await api.post('/api/invite-friend/invite', { email });
@@ -119,6 +118,7 @@ export const inviteFriendRequest = async ({ email }: InviteFriendArgs) => {
   }
 };
 
+// Reject friend request function
 export const rejectFriendRequest = async (invitationId: string) => {
   try {
     const res = await api.post('/api/invite-friend/reject', { invitationId });
@@ -132,6 +132,7 @@ export const rejectFriendRequest = async (invitationId: string) => {
   }
 };
 
+// Accept friend request function
 export const acceptFriendRequest = async (invitationId: string) => {
   try {
     const res = await api.post('/api/invite-friend/accept', { invitationId });
@@ -145,6 +146,7 @@ export const acceptFriendRequest = async (invitationId: string) => {
   }
 };
 
+// Create group chat function
 export const createGroupChat = async (name: string) => {
   try {
     const res = await api.post('/api/group-chat', { name });
@@ -158,6 +160,7 @@ export const createGroupChat = async (name: string) => {
   }
 };
 
+// Add members to group function
 export const addMembersToGroup = async (data: AddMembersToGroupArgs) => {
   try {
     const res = await api.post('/api/group-chat/add', {
@@ -174,6 +177,7 @@ export const addMembersToGroup = async (data: AddMembersToGroupArgs) => {
   }
 };
 
+// Leave group function
 export const leaveGroup = async (data: LeaveGroupArgs) => {
   try {
     const res = await api.post('/api/group-chat/leave', {
@@ -189,6 +193,7 @@ export const leaveGroup = async (data: LeaveGroupArgs) => {
   }
 };
 
+// Remove friend function
 export const removeFriend = async (data: RemoveFriendArgs) => {
   try {
     const res = await api.post('/api/invite-friend/remove', {
@@ -204,6 +209,7 @@ export const removeFriend = async (data: RemoveFriendArgs) => {
   }
 };
 
+// Delete group function
 export const deleteGroup = async (data: DeleteGroupArgs) => {
   try {
     const res = await api.post('/api/group-chat/delete', {
@@ -219,10 +225,12 @@ export const deleteGroup = async (data: DeleteGroupArgs) => {
   }
 };
 
+// Save user subscription function for notifications
 export const saveUserSubscription = async (subscription: PushSubscription) => {
   return api.post('/api/auth/subscribe', subscription);
 };
 
+// Remove user subscription function for notifications
 export const removeUserSubscription = (subscription: PushSubscription) => {
   return api.post('/api/auth/unsubscribe', subscription);
 };

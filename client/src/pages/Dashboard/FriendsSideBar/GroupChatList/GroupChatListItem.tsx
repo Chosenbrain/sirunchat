@@ -8,9 +8,10 @@ import Typography from "@mui/material/Typography";
 import { setChosenGroupChatDetails } from "../../../../actions/chatActions";
 import { useAppSelector } from "../../../../store";
 import { GroupChatDetails } from "../../../../actions/types";
+import Avatar from "../../../../components/Avatar";
 
 interface GroupChatListItemProps {
-    chat: GroupChatDetails
+    chat: GroupChatDetails;
 }
 
 const GroupChatListItem = ({ chat }: GroupChatListItemProps) => {
@@ -41,7 +42,7 @@ const GroupChatListItem = ({ chat }: GroupChatListItemProps) => {
                     backgroundColor: isChatActive ? "#36393f" : "transparent",
                 }}
             >
-                {/* {matches && <Avatar username={username} />} */}
+                {matches && <Avatar username={chat.groupName} />}
 
                 <div
                     style={{

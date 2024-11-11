@@ -1,6 +1,4 @@
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
@@ -11,14 +9,23 @@ const webPush = require('web-push');
 const authRoutes = require('./routes/authRoutes');
 const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 const groupChatRoutes = require('./routes/groupChatRoutes');
-
 const { createSocketServer } = require('./socket/socketServer');
 
-const PORT = process.env.PORT || 5000;
+// Load environment variables in development
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+}
 
+const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// Configure CORS
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? 'https://sirunchat.com' : '*',
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Redirect HTTP to HTTPS in production
 if (process.env.NODE_ENV === 'production') {
@@ -30,16 +37,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// MongoDB Connection URI based on environment
-const MONGO_URI =
-  process.env.NODE_ENV === 'production' ? process.env.MONGO_URI : process.env.MONGO_URI_DEV;
-
+// MongoDB connection
+const MONGO_URI = process.env.MONGO_URI;
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => {
-    console.error('Database connection failed:', err);
-  });
+  .catch((err) => console.error('Database connection failed:', err));
 
 // Configure VAPID keys for Web Push
 const vapidPublicKey = process.env.PUBLIC_VAPID_KEY;
@@ -47,7 +50,7 @@ const vapidPrivateKey = process.env.PRIVATE_VAPID_KEY;
 
 webPush.setVapidDetails('mailto:chosen@goufer.com', vapidPublicKey, vapidPrivateKey);
 
-// Middleware to verify JWT
+// JWT authentication middleware
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
   if (!token) return res.sendStatus(401);
@@ -61,19 +64,19 @@ function authenticateToken(req, res, next) {
 }
 
 // Routes
-app.use('/api/auth', authRoutes); // Public auth routes
-app.use('/api/invite-friend', authenticateToken, friendInvitationRoutes); // Protected routes
-app.use('/api/group-chat', authenticateToken, groupChatRoutes); // Protected routes
+app.use('/api/auth', authRoutes);
+app.use('/api/invite-friend', authenticateToken, friendInvitationRoutes);
+app.use('/api/group-chat', authenticateToken, groupChatRoutes);
 
-// Serve static files from the React app’s build directory
-app.use(express.static(path.join(__dirname, '../client/build')));
+// Serve static files from the React app's build directory in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
-// Send all non-API requests to the React app
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
-
-// Create server and initialize socket connection
+// Create HTTP server and initialize socket connection
 const server = http.createServer(app);
 createSocketServer(server);
 

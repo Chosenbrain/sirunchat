@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAppSelector } from "../../.././store";
+import { useAppSelector } from "../../../store";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
@@ -23,17 +23,21 @@ const drawerWidth = 240;
 
 interface Props {
     window?: () => Window;
-    localStream: MediaStream | null;
-    isUserInRoom: boolean;
-    hasFriends: boolean;
-    hasGroupChats: boolean;
-    hasActiveRooms: boolean;
-    hasInvitations: boolean;
 }
 
 export default function ResponsiveDrawer(props: Props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    // Updated state selector to match expected structure
+    const { localStream, isUserInRoom, friends, groupChatList, activeRooms, pendingInvitations } = useAppSelector((state) => ({
+        localStream: state.videoChat.localStream,
+        isUserInRoom: state.room.isUserInRoom,
+        friends: state.friends.friends,
+        groupChatList: state.friends.groupChatList,
+        activeRooms: state.room.activeRooms,
+        pendingInvitations: state.friends.pendingInvitations,
+    }));
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -69,10 +73,10 @@ export default function ResponsiveDrawer(props: Props) {
                 }}
             >
                 <CreateGroupChatButton />
-                <CreateRoomButton isUserInRoom={props.isUserInRoom} />
+                <CreateRoomButton isUserInRoom={isUserInRoom} />
             </div>
 
-            {props.hasActiveRooms && (
+            {activeRooms.length > 0 && (
                 <>
                     <FriendsTitle title="Active Rooms" />
                     <ActiveRooms />
@@ -80,7 +84,7 @@ export default function ResponsiveDrawer(props: Props) {
                 </>
             )}
 
-            {props.hasFriends && (
+            {friends.length > 0 && (
                 <>
                     <FriendsTitle title="Private Messages" />
                     <FriendsList />
@@ -88,7 +92,7 @@ export default function ResponsiveDrawer(props: Props) {
                 </>
             )}
 
-            {props.hasGroupChats && (
+            {groupChatList.length > 0 && (
                 <>
                     <FriendsTitle title="Group Chats" />
                     <GroupChatList />
@@ -96,7 +100,7 @@ export default function ResponsiveDrawer(props: Props) {
                 </>
             )}
 
-            {props.hasInvitations && (
+            {pendingInvitations.length > 0 && (
                 <>
                     <FriendsTitle title="Invitations" />
                     <PendingInvitationsList />
@@ -106,8 +110,7 @@ export default function ResponsiveDrawer(props: Props) {
         </div>
     );
 
-    const container =
-        window !== undefined ? () => window().document.body : undefined;
+    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -178,7 +181,7 @@ export default function ResponsiveDrawer(props: Props) {
                 }}
             >
                 <Messenger />
-                {props.localStream && <VideoChat />}
+                {localStream && <VideoChat />}
                 <IncomingCall />
             </Box>
         </Box>

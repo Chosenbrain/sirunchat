@@ -322,6 +322,12 @@ interface SetRoomDetails {
     };
 }
 
+export interface DeleteGroupArgs {
+    groupChatId: string;
+    groupChatName: string; // Add this line if it should be part of DeleteGroupArgs
+  }
+  
+
 export type AuthActions =
     | AuthSuccessAction
     | AuthErrorAction

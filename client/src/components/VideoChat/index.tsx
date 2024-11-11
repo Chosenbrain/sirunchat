@@ -61,6 +61,11 @@ const VideoChat = () => {
                     }),
             }}
         >
+            {/* Pass isRoomMinimized and roomResizeHandler as props */}
+            <ResizeRoomButton
+                isRoomMinimized={isRoomMinimized}
+                handleRoomResize={roomResizeHandler}
+            />
             <VideosContainer isRoomMinimized={isRoomMinimized} />
             <RoomButtons
                 isRoomMinimized={isRoomMinimized}

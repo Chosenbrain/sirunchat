@@ -79,7 +79,7 @@ interface GroupChatDetails {
 interface ServerToClientEvents {
   'friend-invitations': (data: Array<PendingInvitation>) => void;
   'friends-list': (data: Array<Friend>) => void;
-  'conn-init': (data: { connUserSocketId: string }) => void; // Add this line
+  'conn-init': (data: { connUserSocketId: string }) => void;
   'online-users': (data: Array<OnlineUser>) => void;
   'delete-chat-success': (data: { message: string }) => void;
   'delete-chat-failed': (data: { message: string }) => void;
@@ -120,7 +120,7 @@ interface ServerToClientEvents {
   }) => void;
 
   'call-response': (data: {
-    otherUserId: string; // the user who is being called (who accepted or rejected the call)
+    otherUserId: string;
     accepted: boolean;
     signal: SimplePeer.SignalData;
   }) => void;
@@ -137,7 +137,6 @@ interface ServerToClientEvents {
 
   'conn-prepare': (data: { connUserSocketId: string }) => void;
 
-
   'conn-signal': (data: {
     connUserSocketId: string;
     signal: SimplePeer.SignalData;
@@ -147,12 +146,12 @@ interface ServerToClientEvents {
     connUserSocketId: string;
   }) => void;
 
-  'delete-chat-confirmation': (data: { userId: string }) => void; // Add confirmation event for delete chat
+  'delete-chat-confirmation': (data: { userId: string }) => void;
 }
 
 interface ClientToServerEvents {
   helloFomClient: () => void;
-  'conn-init': (data: { connUserSocketId: string }) => void; // Add this line
+  'conn-init': (data: { connUserSocketId: string }) => void;
   'upload-file': (data: { file: File; receiverUserId: string }) => void;
 
   'direct-message': (data: {
@@ -200,7 +199,7 @@ interface ClientToServerEvents {
     connUserSocketId: string;
   }) => void;
 
-  'delete-chat': (data: { userId: string }) => void; // Add delete chat event
+  'delete-chat': (data: { userId: string }) => void;
 }
 
 let currentPeerConnection: any = null;
@@ -215,7 +214,8 @@ const generateUniqueId = (): string => {
   return Math.random().toString(36).substr(2, 9);
 };
 
-const SERVER_URL = 'http://localhost:5000';
+// Use environment variable or default to localhost for SERVER_URL
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
 
 const connectWithSocketServer = (userDetails: UserDetails) => {
   socket = io(SERVER_URL, {

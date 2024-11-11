@@ -11,16 +11,14 @@ const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 const groupChatRoutes = require('./routes/groupChatRoutes');
 const { createSocketServer } = require('./socket/socketServer');
 
-// Load environment variables in development
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-}
+// Load environment variables
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 
-// Configure CORS
+// Configure CORS for cross-origin access
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' ? 'https://sirunchat.com' : '*',
   optionsSuccessStatus: 200,
@@ -42,7 +40,10 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Database connection failed:', err));
+  .catch((err) => {
+    console.error('Database connection failed:', err);
+    process.exit(1); // Exit process if database connection fails
+  });
 
 // Configure VAPID keys for Web Push
 const vapidPublicKey = process.env.PUBLIC_VAPID_KEY;
@@ -70,9 +71,15 @@ app.use('/api/group-chat', authenticateToken, groupChatRoutes);
 
 // Serve static files from the React app's build directory in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  const buildPath = path.join(__dirname, '../client/build');
+  app.use(express.static(buildPath));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'), (err) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+    });
   });
 }
 
@@ -80,6 +87,7 @@ if (process.env.NODE_ENV === 'production') {
 const server = http.createServer(app);
 createSocketServer(server);
 
+// Start server
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

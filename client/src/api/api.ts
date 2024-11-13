@@ -11,7 +11,7 @@ import {
   DeleteGroupArgs,
 } from './types';
 
-// Set base URL from environment variable with a fallback to localhost for development
+// Use the production URL in Heroku or fall back to localhost for local development
 const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Create an Axios instance with the base URL
@@ -31,9 +31,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (err) => {
-    return Promise.reject(err);
-  }
+  (err) => Promise.reject(err)
 );
 
 // Function to log out and redirect to the login page
@@ -45,44 +43,28 @@ const logOut = () => {
 // Function to check for authorization errors and log out if 401 status is received
 const checkForAuthorization = (error: any) => {
   const responseCode = error?.response?.status;
-  if (responseCode) {
-    console.log("Error response code:", responseCode, error.response?.data);  // Log error code and data
-    if (responseCode === 401) {
-      logOut();
-    }
+  if (responseCode === 401) {
+    logOut();
   }
 };
 
 // Login function
 export const login = async ({ email, password }: LoginArgs) => {
   try {
-    const res = await api.post<AuthResponse>('/api/auth/login', {
-      email,
-      password,
-    });
+    const res = await api.post<AuthResponse>('/api/auth/login', { email, password });
     return res.data;
   } catch (err: any) {
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
 // Registration function
 export const register = async ({ email, password, username }: RegisterArgs) => {
   try {
-    const res = await api.post<AuthResponse>('/api/auth/register', {
-      email,
-      password,
-      username,
-    });
+    const res = await api.post<AuthResponse>('/api/auth/register', { email, password, username });
     return res.data;
   } catch (err: any) {
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -90,17 +72,10 @@ export const register = async ({ email, password, username }: RegisterArgs) => {
 export const getMe = async () => {
   try {
     const res = await api.get<GetMeResponse>('/api/auth/me');
-    return {
-      me: res.data.me,
-      statusCode: 200,
-    };
+    return { me: res.data.me, statusCode: 200 };
   } catch (err: any) {
-    console.log("Error fetching user details:", err);  // Log error
     checkForAuthorization(err);
-    return {
-      error: true,
-      statusCode: err?.response?.status,
-    };
+    return { error: true, statusCode: err?.response?.status };
   }
 };
 
@@ -111,10 +86,7 @@ export const inviteFriendRequest = async ({ email }: InviteFriendArgs) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -125,10 +97,7 @@ export const rejectFriendRequest = async (invitationId: string) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -139,10 +108,7 @@ export const acceptFriendRequest = async (invitationId: string) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -153,10 +119,7 @@ export const createGroupChat = async (name: string) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -170,10 +133,7 @@ export const addMembersToGroup = async (data: AddMembersToGroupArgs) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -186,10 +146,7 @@ export const leaveGroup = async (data: LeaveGroupArgs) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -202,10 +159,7 @@ export const removeFriend = async (data: RemoveFriendArgs) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -218,10 +172,7 @@ export const deleteGroup = async (data: DeleteGroupArgs) => {
     return res.data;
   } catch (err: any) {
     checkForAuthorization(err);
-    return {
-      error: true,
-      message: err.response?.data,
-    };
+    return { error: true, message: err.response?.data };
   }
 };
 
@@ -234,3 +185,5 @@ export const saveUserSubscription = async (subscription: PushSubscription) => {
 export const removeUserSubscription = (subscription: PushSubscription) => {
   return api.post('/api/auth/unsubscribe', subscription);
 };
+
+export default api;

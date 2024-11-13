@@ -7,11 +7,9 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker'; // Importing service worker for offline support
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 

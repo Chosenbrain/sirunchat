@@ -1,3 +1,35 @@
 node_modules
 .env
 .DS_Store
+# Ignore node modules and logs
+node_modules/
+*.log
+
+# Ignore environment files
+.env
+
+# Ignore system files and directories
+.DS_Store
+.Trash/
+*.zip
+*.dmg
+*.iso
+*.pdf
+/Applications/
+/Desktop/
+/Documents/
+/Downloads/
+/Library/
+/Movies/
+/Music/
+/Pictures/
+/Public/
+*.mp4
+*.jpg
+*.jpeg
+*.png
+
+# Ignore other specific files
+*.xlsx
+*.docx
+*.csv

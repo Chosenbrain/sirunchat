@@ -1,6 +1,4 @@
 # sirunchat
-Certainly! Here’s a comprehensive README for SirunChat that includes an introduction, features, installation instructions, and usage details.
-SirunChat
 
 SirunChat is a modern chat application designed to deliver a clean, feature-rich, and secure messaging experience. With a focus on privacy and user-friendliness, SirunChat supports real-time direct and group messaging, calls, file sharing, and customizable chat interfaces. This project is built using React for the frontend, Node.js and Express for the backend, Socket.IO for real-time communication, and MongoDB for data storage. Firebase is also utilized for optional storage and integrations.
 Table of Contents
